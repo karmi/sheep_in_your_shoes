@@ -29,12 +29,17 @@ module SheepInYourShoes
       @sheep.empty?
     end
 
+    def remove_sheep_on(x, y)
+      found = @sheep.select { |sheep| (x-13..x+13).include?(sheep.x) && (y-13..y+13).include?(sheep.y) }.first
+      found.back! and @sheep.delete(found) unless found.nil? || found.off?
+    end
+
   end
 
   # Sheep
   class Sheep
 
-    attr_reader :x, :y, :shape
+    attr_reader :x, :y
 
     def initialize(options={})
       @x, @y = options[:x] || 0, options[:y] || 0
@@ -49,17 +54,28 @@ module SheepInYourShoes
     end
 
     def baa!
-      $app.para "Baaa!" and @off = true unless @off
+      baa = $app.para("Baaa!") and @off = true unless @off
+      baa.move @x, @y
     end
 
     def off?
       @y < 15
     end
 
+    def back!
+      woof = $app.para "Wooof!", :stroke => '#fff', :fill => '#000'
+      woof.move(@x, @y)
+      @y = $app.height - 15
+      @shape.move @x, @y
+      @shape.style :fill => '#000'
+    end
+
   end
 
   # Dog
   class Dog
+
+    attr_reader :x, :y
 
     def initialize
       @x, @y = $app.width/2-13, $app.height/4
@@ -96,6 +112,7 @@ Shoes.app do
 
   keypress do |key|
     @pasture.dog.run!(key)
+    @pasture.remove_sheep_on(@pasture.dog.x, @pasture.dog.y)
   end
 
 end
