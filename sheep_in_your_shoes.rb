@@ -3,7 +3,7 @@ module SheepInYourShoes
   # The Pasture
   class Pasture
 
-    attr_reader :sheep
+    attr_reader :sheep, :dog
 
     def initialize(num_sheep=0)
       @sheep = []
@@ -12,6 +12,7 @@ module SheepInYourShoes
       1.upto(num_sheep) do |i|
         @sheep << Sheep.new( { :x => (i * 15),  :y => ($app.height - 10)} )
       end
+      @dog = Dog.new
     end
 
     def random_sheep
@@ -53,6 +54,16 @@ module SheepInYourShoes
 
     def off?
       @y < 15
+    end
+
+  end
+
+  # Dog
+  class Dog
+
+    def initialize
+      $app.fill "#FFFC61"; $app.stroke "#000"; $app.strokewidth 4
+      @shape = $app.oval(($app.width/2-13), ($app.height/2-13), 26, 26) # Draw the dog
     end
 
   end
