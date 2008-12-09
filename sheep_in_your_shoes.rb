@@ -39,12 +39,12 @@ module SheepInYourShoes
     def initialize(options={})
       @x, @y = options[:x] || 0, options[:y] || 0
       $app.fill "#fff"; $app.stroke "#000"; $app.strokewidth 3
-      @shape = $app.oval(0, 0, 15, 15) # Draw the sheep
+      @shape = $app.oval 0, 0, 15, 15 # Draw the sheep
       @shape.move @x, @y
     end
 
     def run!
-      @y -= 15 and @shape.move(@x, @y) unless off?
+      @y -= 15 and @shape.move @x, @y unless off?
       baa! if off?
     end
 
@@ -62,8 +62,19 @@ module SheepInYourShoes
   class Dog
 
     def initialize
+      @x, @y = $app.width/2-13, $app.height/4
       $app.fill "#FFFC61"; $app.stroke "#000"; $app.strokewidth 4
-      @shape = $app.oval(($app.width/2-13), ($app.height/2-13), 26, 26) # Draw the dog
+      @shape = $app.oval(@x, @y, 26, 26) # Draw the dog
+    end
+
+    def run!(direction)
+      case direction
+        when :left  then @x -= 26 unless @x < 26
+        when :right then @x += 26 unless @x > $app.width-51
+        when :down  then @y += 26 unless @y > $app.height-51
+        when :up    then @y -= 26 unless @y < 0
+      end
+      @shape.move @x, @y
     end
 
   end
@@ -81,6 +92,10 @@ Shoes.app do
       @sheep = @pasture.random_sheep
       @sheep.run! if @sheep
     end
+  end
+
+  keypress do |key|
+    @pasture.dog.run!(key)
   end
 
 end
