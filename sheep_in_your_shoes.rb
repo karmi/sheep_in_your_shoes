@@ -1,28 +1,75 @@
-Shoes.app do
-
-  NUM_SHEEPS = 25
+module SheepInYourShoes
 
   # The Pasture
-  background gradient( "#fff", "#00ff05")
-  border black, :strokewidth => 6
+  class Pasture
 
-  x, y = 10, self.height - 10
+    attr_reader :sheep
 
-  # Sheeps
-  @sheeps = []
-  fill "#fff"
-  stroke "#000"
-  strokewidth 3
-  1.upto NUM_SHEEPS do |i|
-    sheep = oval(0, 0, 15, 15)
-    sheep.move x + i * 15, y
-    @sheeps << sheep
+    def initialize(num_sheep=0)
+      @sheep = []
+      $app.background gradient( "#fff", "#00ff05")
+      $app.border "#000", :strokewidth => 6
+      1.upto(num_sheep) do |i|
+        @sheep << Sheep.new( { :x => (i * 15),  :y => ($app.height - 10)} )
+      end
+    end
+
+    def random_sheep
+      sheep = @sheep[rand @sheep.size]
+      if sheep && sheep.off?
+        @sheep -= [sheep]
+        random_sheep
+      else
+        sheep
+      end
+    end
+
+    def empty?
+      @sheep.empty?
+    end
+
   end
 
-  animate(20) do
-    # x += 1
-    y -= 5
-    @sheeps[ rand NUM_SHEEPS ].move x.to_i, y.to_i
+  # Sheep
+  class Sheep
+
+    attr_reader :x, :y, :shape
+
+    def initialize(options={})
+      @x, @y = options[:x] || 0, options[:y] || 0
+      $app.fill "#fff"; $app.stroke "#000"; $app.strokewidth 3
+      @shape = $app.oval(0, 0, 15, 15) # Draw the sheep
+      @shape.move @x, @y
+    end
+
+    def run!
+      @y -= 15 and @shape.move(@x, @y) unless off?
+      baa! if off?
+    end
+
+    def baa!
+      $app.para "Baaa!" and @off = true unless @off
+    end
+
+    def off?
+      @y < 15
+    end
+
+  end
+
+end
+
+
+Shoes.app do
+
+  $app = self
+  @pasture = SheepInYourShoes::Pasture.new(25)
+
+  animate(30) do
+    unless @pasture.empty?
+      @sheep = @pasture.random_sheep
+      @sheep.run! if @sheep
+    end
   end
 
 end
