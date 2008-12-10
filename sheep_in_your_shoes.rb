@@ -3,9 +3,10 @@ module SheepInYourShoes
   # The Pasture
   class Pasture
 
-    attr_reader :sheep, :dog
+    attr_reader :sheep, :dog, :catched
 
     def initialize(num_sheep=0)
+      @catched = 0
       @sheep = []
       $app.background gradient( "#fff", "#00ff05")
       $app.border "#000", :strokewidth => 6
@@ -31,7 +32,7 @@ module SheepInYourShoes
 
     def remove_sheep_on(x, y)
       found = @sheep.select { |sheep| (x-13..x+13).include?(sheep.x) && (y-13..y+13).include?(sheep.y) }.first
-      found.back! and @sheep.delete(found) unless found.nil? || found.off?
+      found.back! and @sheep.delete(found) and @catched += 1 unless found.nil? || found.off?
     end
 
   end
@@ -103,10 +104,23 @@ Shoes.app do
   $app = self
   @pasture = SheepInYourShoes::Pasture.new(25)
 
+  def game_is_over(message)
+    @finale.replace(message)
+    @finale.move 0, 150
+    @finale.show
+  end
+
+  def game_over?
+    @game_over
+  end
+
   animate(30) do
     unless @pasture.empty?
       @sheep = @pasture.random_sheep
       @sheep.run! if @sheep
+    else
+      message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched} sheep!" : "Game Over!"
+      game_is_over(message)
     end
   end
 
@@ -114,5 +128,8 @@ Shoes.app do
     @pasture.dog.run!(key)
     @pasture.remove_sheep_on(@pasture.dog.x, @pasture.dog.y)
   end
+
+  @finale = title "Game Over!", :stroke => '#082299', :fill => '#fff', :align => 'center'
+  @finale.hide
 
 end
