@@ -105,16 +105,12 @@ Shoes.app do
   @pasture = SheepInYourShoes::Pasture.new(25)
 
   def game_is_over(message)
-    @finale.replace(message)
+    @finale = title(message, :stroke => '#082299', :fill => '#fff', :align => 'center')
     @finale.move 0, 150
-    @finale.show
+    @timer.stop
   end
 
-  def game_over?
-    @game_over
-  end
-
-  animate(30) do
+  @timer = animate(30) do
     unless @pasture.empty?
       @sheep = @pasture.random_sheep
       @sheep.run! if @sheep
@@ -128,8 +124,5 @@ Shoes.app do
     @pasture.dog.run!(key)
     @pasture.remove_sheep_on(@pasture.dog.x, @pasture.dog.y)
   end
-
-  @finale = title "Game Over!", :stroke => '#082299', :fill => '#fff', :align => 'center'
-  @finale.hide
 
 end
