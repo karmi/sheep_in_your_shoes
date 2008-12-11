@@ -1,7 +1,7 @@
 Sheep In Your Shoes : A Game
 ============================
 
-![Game Screenshot](./screenshot.png)
+![Game Screenshot](http://github.com/karmi/sheep_in_your_shoes/tree/master/screenshot.png)
 
 What?
 -----
