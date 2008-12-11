@@ -151,10 +151,22 @@ module SheepInYourShoes
   # == The message
   class Message
     class << self
+      # Display initial message (and hide it after 2 seconds)
+      def initial
+        @@initial_message = Canvas.draw do
+          stack :margin => 30 do
+            background '#fff', :stroke => '#000',:curve => 15
+              title "Use arrow keys to catch sheep with the dog", :stroke => '#000', :align => 'center', :margin_top => 15
+          end
+        end.move(0, 150)
+        Canvas.get.timer(3) do
+          @@initial_message.clear
+        end
+      end
       # Display final message
-      def display(message)
+      def final(message)
         Canvas.draw do
-          stack :margin => 30, :margin_top => 100 do
+          stack :margin => 30, :margin_top => 0 do
             background '#fff', :stroke => '#000',:curve => 15
             title message, :stroke => '#082299', :align => 'center', :margin_top => 15
             stack(:attach => @finale, :align => 'center', :margin => 5) do
@@ -173,8 +185,15 @@ end
 
 Shoes.app :title => 'Sheep Running In Your Shoes' do
 
+  # Get reference to game canvas
   SheepInYourShoes::Canvas.set( self )
+
+  # Set up game
   @pasture = SheepInYourShoes::Pasture.new(25)
+
+  # Display instructions
+  SheepInYourShoes::Message.initial
+
 
   # Now... LET'S RUN! :)
   @timer = animate(30) do
@@ -184,7 +203,7 @@ Shoes.app :title => 'Sheep Running In Your Shoes' do
     else
       # ... or display game over / congratz message and stop the game
       message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched-1} sheep!" : "Game Over!"
-      SheepInYourShoes::Message.display( message )
+      SheepInYourShoes::Message.final( message )
       @timer.stop
     end
   end
