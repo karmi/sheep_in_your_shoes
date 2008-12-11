@@ -2,7 +2,7 @@
 #
 # A simple game for the Shoes GUI toolkit by Why The Lucky Stiff (www.shoooes.net).
 #
-# An educational aid for teaching programming.
+# An educational aid for teaching programming concepts.
 #
 # An illustration of OOP principles: mapping the problem domain, encapsulation, modularity, interface.
 #
