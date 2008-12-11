@@ -1,7 +1,7 @@
 Sheep In Your Shoes : A Game
 ============================
 
-![Game Screenshot](screenshot.png)
+![Game Screenshot](./screenshot.png)
 
 What?
 -----
