@@ -53,7 +53,7 @@ Binaries (not necessary up-to-date)
 
 Written by Karel Minarik ([www.karmi.cz](karmi)). Published under MIT license.
 
-<!-- References -->
+
 
 [src]:            http://github.com/karmi/sheep_in_your_shoes/commits/master
 [boxed]:          http://the-shoebox.org/apps/109
