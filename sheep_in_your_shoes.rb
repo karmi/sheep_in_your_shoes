@@ -8,6 +8,8 @@
 #
 # A demo of modern 2D computer graphics and interactivity.
 #
+# A testament of iterative, organic cultivating of the code toward it's better self
+#
 # Written by Karel Minarik (www.karmi.cz). Published under MIT license.
 #
 #
