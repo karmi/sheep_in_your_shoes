@@ -119,7 +119,7 @@ Shoes.app do
       @sheep = @pasture.random_sheep
       @sheep.run! if @sheep
     else
-      message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched} sheep!" : "Game Over!"
+      message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched-1} sheep!" : "Game Over!"
       game_is_over(message)
     end
   end
