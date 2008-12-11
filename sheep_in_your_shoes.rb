@@ -64,8 +64,10 @@ module SheepInYourShoes
     end
 
     def back!
-      woof = $app.para "Wooof!", :stroke => '#fff', :fill => '#000'
-      woof.move(@x, @y)
+      woof = $app.inscription( "Wooof!", :stroke => '#000', :fill => '#ceffcf', :margin => 5 ).move(@x, @y)
+      $app.timer(1) { woof.hide }
+      $app.fill "#14c2d2"; $app.stroke "#ceffcf"; $app.strokewidth 1
+      $app.star(@x, @y, 10, 10, 8)
       @y = $app.height - 15
       @shape.move @x, @y
       @shape.style :fill => '#000'
@@ -106,7 +108,7 @@ Shoes.app :title => 'Sheep Running In Your Shoes' do
 
   def game_is_over(message)
     stack :margin => 30, :margin_top => 100 do
-      background '#fff', :stroke => '#000',:curve => 15, :transparency => 0.9
+      background '#fff', :stroke => '#000',:curve => 15
       title message, :stroke => '#082299', :align => 'center', :margin_top => 15
       stack(:attach => @finale, :align => 'center', :margin => 5) do
         b = button("Close", :align => 'center') { close }
