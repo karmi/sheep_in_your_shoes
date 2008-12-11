@@ -99,14 +99,20 @@ module SheepInYourShoes
 end
 
 
-Shoes.app do
+Shoes.app :title => 'Sheep Running In Your Shoes' do
 
   $app = self
   @pasture = SheepInYourShoes::Pasture.new(25)
 
   def game_is_over(message)
-    @finale = title(message, :stroke => '#082299', :fill => '#fff', :align => 'center')
-    @finale.move 0, 150
+    stack :margin => 30, :margin_top => 100 do
+      background '#fff', :stroke => '#000',:curve => 15, :transparency => 0.9
+      title message, :stroke => '#082299', :align => 'center', :margin_top => 15
+      stack(:attach => @finale, :align => 'center', :margin => 5) do
+        b = button("Close", :align => 'center') { close }
+        b.displace(self.width/2-70-b.width/2, 0) # Center the button
+      end
+    end
     @timer.stop
   end
 
