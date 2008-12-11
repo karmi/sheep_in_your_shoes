@@ -1,5 +1,20 @@
 module SheepInYourShoes
 
+  # The game's canvas
+  class Canvas
+
+    class << self
+
+      def get; @@canvas; end
+
+      def set(canvas); @@canvas = canvas; end
+
+      def draw(&b); @@canvas.instance_eval(&b) if block_given?; end
+
+    end
+
+  end
+
   # The Pasture
   class Pasture
 
@@ -8,10 +23,13 @@ module SheepInYourShoes
     def initialize(num_sheep=0)
       @catched = 0
       @sheep = []
-      $app.background gradient( "#fff", "#00ff05")
-      $app.border "#000", :strokewidth => 6
+      # Draw the green pasture
+      Canvas.draw do
+        background gradient( "#fff", "#00ff05")
+        border "#000", :strokewidth => 6
+      end
       1.upto(num_sheep) do |i|
-        @sheep << Sheep.new( { :x => (i * 15),  :y => ($app.height - 10)} )
+        @sheep << Sheep.new( { :x => (i * 15),  :y => (Canvas.get.height - 10)} )
       end
       @dog = Dog.new
     end
@@ -44,8 +62,8 @@ module SheepInYourShoes
 
     def initialize(options={})
       @x, @y = options[:x] || 0, options[:y] || 0
-      $app.fill "#fff"; $app.stroke "#000"; $app.strokewidth 3
-      @shape = $app.oval 0, 0, 15, 15 # Draw the sheep
+      Canvas.draw { fill "#fff"; stroke "#000"; strokewidth 3 }
+      @shape = Canvas.draw { oval 0, 0, 15, 15 }
       @shape.move @x, @y
     end
 
@@ -55,7 +73,7 @@ module SheepInYourShoes
     end
 
     def baa!
-      baa = $app.para("Baaa!") and @off = true unless @off
+      baa = Canvas.draw { para("Baaa!") } and @off = true unless @off
       baa.move @x, @y
     end
 
@@ -64,13 +82,14 @@ module SheepInYourShoes
     end
 
     def back!
-      woof = $app.inscription( "Wooof!", :stroke => '#000', :fill => '#ceffcf', :margin => 5 ).move(@x, @y)
-      $app.timer(1) { woof.hide }
-      $app.fill "#14c2d2"; $app.stroke "#ceffcf"; $app.strokewidth 1
-      $app.star(@x, @y, 10, 10, 8)
-      @y = $app.height - 15
-      @shape.move @x, @y
-      @shape.style :fill => '#000'
+      # Draw the woof
+      woof = Canvas.draw { inscription( "Wooof!", :stroke => '#000', :fill => '#ceffcf', :margin => 5 ) }.move(@x, @y)
+      Canvas.get.timer(1) { woof.hide }
+      # Draw the star
+      Canvas.draw { fill "#14c2d2"; stroke "#ceffcf"; strokewidth 1; star(0, 0, 10, 10, 8) }.move(@x, @y)
+      @y = Canvas.get.height - 15
+      @shape.move @x, @y                # Move sheep to bottom ...
+      @shape.style :fill => '#000'      # ... and paint it black
     end
 
   end
@@ -81,16 +100,21 @@ module SheepInYourShoes
     attr_reader :x, :y
 
     def initialize
-      @x, @y = $app.width/2-13, $app.height/4
-      $app.fill "#FFFC61"; $app.stroke "#000"; $app.strokewidth 4
-      @shape = $app.oval(@x, @y, 26, 26) # Draw the dog
+      @x, @y = Canvas.get.width/2-13, Canvas.get.height/4
+      @shape = Canvas.draw do
+        fill "#FFFC61"
+        stroke "#000"
+        strokewidth 4
+        oval(0, 0, 26, 26)
+      end
+      @shape.move @x, @y
     end
 
     def run!(direction)
       case direction
         when :left  then @x -= 26 unless @x < 26
-        when :right then @x += 26 unless @x > $app.width-51
-        when :down  then @y += 26 unless @y > $app.height-51
+        when :right then @x += 26 unless @x > Canvas.get.width-51
+        when :down  then @y += 26 unless @y > Canvas.get.height-51
         when :up    then @y -= 26 unless @y < 0
       end
       @shape.move @x, @y
@@ -103,7 +127,7 @@ end
 
 Shoes.app :title => 'Sheep Running In Your Shoes' do
 
-  $app = self
+  SheepInYourShoes::Canvas.set( self )
   @pasture = SheepInYourShoes::Pasture.new(25)
 
   def game_is_over(message)
