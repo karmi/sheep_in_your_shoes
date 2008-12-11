@@ -12,7 +12,9 @@
 #
 # Written by Karel Minarik (www.karmi.cz). Published under MIT license.
 #
+# Source is available at http://github.com/karmi/sheep_in_your_shoes
 #
+# 
 module SheepInYourShoes
 
   # == The game's canvas

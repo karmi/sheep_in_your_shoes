@@ -6,7 +6,7 @@ Sheep In Your Shoes : A Game
 What?
 -----
 
-* A **simple game** for the _Shoes_ GUI toolkit by _Why The Lucky Stiff_. See [www.shoooes.net][shoes].
+* A [**simple game**][boxed] for the ***Shoes*** GUI toolkit by _Why The Lucky Stiff_. See [www.shoooes.net][shoes].
 
 * An **educational** aid for teaching programming concepts.
 
@@ -26,13 +26,13 @@ When you have to teach basics of programming -- _nota bene_ to humanities studen
 
 The principles are laid out in the code of `animals-oriented-on-objects.rb` file. But you cannot _see_ them. And you are not sure _why_ do you make those silly classes anyway.
 
-Things can be seen much clearly in the game. You suddenly know why a sheep is an _„object“_ and why we say it has some _properties_ and some _messages_ can be sent to it.
+Things can be seen much clearly in the game. You suddenly know why a sheep is an _„object“_ and why we say it has some _properties_ (like _position_, maybe?) and some _messages_ (like „Run, baby, run!“) can be sent to it.
 
-You also know how to start writing code. You usually start with _something_. A `simple-bounce.rb` file from samples included with _Shoes_ in this case.
+You also know how to start writing code. You usually start with _something_. A `simple-bounce.rb` file from samples included with _Shoes_ in this case (see initial _commit_).
 
-Then you gradually build up the environment of your game: you make the pasture green a put a sheep on it. You make the sheep move. You add more sheep and make the move. You add a dog, and make the dog catch the sheep. In the end you „refactor“ the syntax of the game, add documentation, things like that.
+Then you gradually build up the environment of your game: you make the pasture green and put a sheep on it. You make the sheep move. You add more sheep and make them move. You add a dog, and make the dog catch the sheep. And so on. In the end you „refactor“ the syntax of the game, add documentation, things like that.
 
-All of these steps are saved in **Git tags** one to thirteen, so you can easily do a `git checkout 1`, `git checkout 2` to see development of the code and walk through it slowly.
+All of these **steps** are saved in Git repository tags 1 to 13, so you can easily do a `git checkout 1`, `git checkout 2` to see development of the code and [walk through it][src] slowly.
 
 _Shoes_ and _Ruby_ make all of this very, very easy. Ruby is probably the best language for teaching programming, for beginners and advanced alike. And with _Shoes_, you can just see everything.
 
@@ -57,7 +57,7 @@ Written by Karel Minarik ([www.karmi.cz](karmi)). Published under MIT license.
 
 <!-- References -->
 
-[src]:            http://github.com/karmi/sheep_in_your_shoes/tree
+[src]:            http://github.com/karmi/sheep_in_your_shoes/commits/master
 [boxed]:          http://the-shoebox.org/apps/109
 [karmi]:          http://www.karmi.cz
 
