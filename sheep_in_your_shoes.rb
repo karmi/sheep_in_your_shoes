@@ -15,18 +15,14 @@ module SheepInYourShoes
 
   # == The game's canvas
   class Canvas
-
     class << self
-
+      # Get reference to Shoes canvas
       def get; @@canvas; end
-
+      # Set reference to Shoes canvas
       def set(canvas); @@canvas = canvas; end
-
       # Pass block of Shoes code as argument
       def draw(&b); @@canvas.instance_eval(&b) if block_given?; end
-
     end
-
   end
 
   # == The Pasture
@@ -150,6 +146,25 @@ module SheepInYourShoes
 
   end
 
+  # == The message
+  class Message
+    class << self
+      # Display final message
+      def display(message)
+        Canvas.draw do
+          stack :margin => 30, :margin_top => 100 do
+            background '#fff', :stroke => '#000',:curve => 15
+            title message, :stroke => '#082299', :align => 'center', :margin_top => 15
+            stack(:attach => @finale, :align => 'center', :margin => 5) do
+              b = button("Close", :align => 'center') { close }
+              b.displace(self.width/2-70-b.width/2, 0) # Center the button
+            end
+          end
+        end
+      end
+    end
+  end
+
 end
 
 # == The Shoes application
@@ -159,27 +174,16 @@ Shoes.app :title => 'Sheep Running In Your Shoes' do
   SheepInYourShoes::Canvas.set( self )
   @pasture = SheepInYourShoes::Pasture.new(25)
 
-  # Display game over / congratz message and stop the game
-  def game_is_over(message)
-    stack :margin => 30, :margin_top => 100 do
-      background '#fff', :stroke => '#000',:curve => 15
-      title message, :stroke => '#082299', :align => 'center', :margin_top => 15
-      stack(:attach => @finale, :align => 'center', :margin => 5) do
-        b = button("Close", :align => 'center') { close }
-        b.displace(self.width/2-70-b.width/2, 0) # Center the button
-      end
-    end
-    @timer.stop
-  end
-
   # Now... LET'S RUN! :)
   @timer = animate(30) do
     unless @pasture.empty?
       @sheep = @pasture.random_sheep
       @sheep.run! if @sheep
     else
+      # ... or display game over / congratz message and stop the game
       message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched-1} sheep!" : "Game Over!"
-      game_is_over(message)
+      SheepInYourShoes::Message.display( message )
+      @timer.stop
     end
   end
 
