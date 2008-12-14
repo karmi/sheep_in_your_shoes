@@ -41,6 +41,7 @@ module SheepInYourShoes
       # Draw the green pasture ...
       Canvas.draw do
         background gradient( "#fff", "#00ff05")
+        image "pasture.jpg" # Copyright © 2008 Aardman Animations Ltd.
         border "#000", :strokewidth => 6
       end
       # ... and populate it with sheep
@@ -126,7 +127,7 @@ module SheepInYourShoes
     attr_reader :x, :y
 
     def initialize
-      @x, @y = Canvas.get.width/2-13, Canvas.get.height/4
+      @x, @y = Canvas.get.width/2-13, Canvas.get.height/3
       # Draw the dog
       @shape = Canvas.draw do
         fill "#FFFC61"
@@ -161,7 +162,7 @@ module SheepInYourShoes
               title "Use arrow keys to catch sheep with the dog", :stroke => '#000', :align => 'center', :margin_top => 15
           end
         end.move(0, 150)
-        Canvas.get.timer(3) do
+        Canvas.get.timer(2) do
           @@initial_message.clear
         end
       end
@@ -175,7 +176,7 @@ module SheepInYourShoes
               b = button("Close", :align => 'center') { close }
               b.displace(self.width/2-70-b.width/2, 0) # Center the button
             end
-          end
+          end.move(0, 30)
         end
       end
     end
@@ -185,7 +186,7 @@ end
 
 # == The Shoes application
 
-Shoes.app :title => 'Sheep Running In Your Shoes' do
+Shoes.app :title => 'Sheep Running In Your Shoes', :width => 600, :height => 446 do
 
   # Get reference to game canvas
   SheepInYourShoes::Canvas.set( self )
@@ -196,21 +197,22 @@ Shoes.app :title => 'Sheep Running In Your Shoes' do
   # Display instructions
   SheepInYourShoes::Message.initial
 
-
-  # Now... LET'S RUN! :)
-  @timer = animate(30) do
-    unless @pasture.empty?
-      @sheep = @pasture.random_sheep
-      @sheep.run! if @sheep
-    else
-      # ... or display game over / congratz message and stop the game
-      message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched-1} sheep!" : "Game Over!"
-      SheepInYourShoes::Message.final( message )
-      @timer.stop
+  timer(2) do
+    # Now... LET'S RUN! :)
+    @timer = animate(30) do
+      unless @pasture.empty?
+        @sheep = @pasture.random_sheep
+        @sheep.run! if @sheep
+      else
+        # ... or display game over / congratz message and stop the game
+        message = @pasture.catched > 5 ? "Congratz! You have catched more than #{@pasture.catched-1} sheep!" : "Game Over!"
+        SheepInYourShoes::Message.final( message )
+        @timer.stop
+      end
     end
   end
 
-  # Capture keypress and pass it to the dog
+  # Capture keypress and pass it to the dog and pasture
   keypress do |key|
     @pasture.dog.run!(key)
     @pasture.remove_sheep_on(@pasture.dog.x, @pasture.dog.y)
