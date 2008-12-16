@@ -1,6 +1,8 @@
 Sheep In Your Shoes : A Game
 ============================
 
+!["Screenshot of the game"](http://github.com/karmi/sheep_in_your_shoes/raw/master/screenshot.png)
+
 What?
 -----
 
